@@ -19,6 +19,14 @@ const routes = [
   {
     path: '/loginbackend',
     component: () => import('../views/backend/LoginBackend.vue')
+  },
+  {
+    path: '/',
+    component: () => import('../views/frontend/Home.vue')
+  },
+  {
+    path: '/confirmotp',
+    component: () => import('../views/frontend/ConfirmOTP.vue')
   }
 ]
 
