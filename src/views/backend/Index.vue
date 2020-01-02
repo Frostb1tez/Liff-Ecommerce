@@ -20,19 +20,14 @@
           <td class="text-right">{{product.product_stock}}</td>
           <td class="text-right">
             <a href="#" >
-              <i @click="onEdit(product)" class="material-icons">edit</i>
+              <i @click="onEdit(product.id)" class="material-icons">edit</i>
             </a>
             <a href="#">
               <i @click="onDelete(product.id)" class="material-icons">delete</i>
             </a>
-            <!-- <router-link
-              :to="{
-              name:'ProductPage',
-              params:{id: product.id}
-              }"
-            >
-            <i class="material-icons">visibility</i>
-            </router-link> -->
+            <a href="#">
+              <i @click="onView(product.id)" class="material-icons">visibility</i>
+            </a>
           </td>
         </tr>
       </tbody>
@@ -41,7 +36,6 @@
 </template>
 
 <script>
-import db from '@/config/index'
 export default {
   name: 'Index',
   data () {
@@ -54,24 +48,31 @@ export default {
   },
   methods: {
     getProduct () {
-      db.collection('product').get().then(querySnapshot => {
-        const products = []
-        const productsArray = []
-        let i = 0
-        querySnapshot.forEach(doc => {
-          productsArray.push(doc.data())
-          productsArray[i].id = doc.id
-          products.push(productsArray[i])
-          i++
+      this.$axios.get('/getproduct')
+        .then((response) => {
+          this.products = response.data.data.product
         })
-        this.products = products
-      })
+        .catch(err => {
+          console.log(err)
+        })
     },
     onDelete (id) {
-      db.collection('product').doc(id).delete()
-        .then(response => {
+      this.$axios.post('/deleteproduct',
+        {
+          id: id
+        })
+        .then(() => {
           this.getProduct()
         })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    onEdit (id) {
+      this.$router.push({ path: `/index/edit/${id}` })
+    },
+    onView (id) {
+      this.$router.push({ path: `/index/view/${id}` })
     }
   }
 }

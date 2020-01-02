@@ -17,3 +17,9 @@ p{
     color: #606161;
     font-family: RSU;
 }
+.q-field--filled .q-field__control{
+    margin-right: 10px
+  }
+  .q-card__section {
+    margin-bottom: 3%;
+  }

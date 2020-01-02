@@ -13,6 +13,16 @@ const routes = [
       },
       {
         path: 'index', component: () => import('../views/backend/Index.vue')
+      },
+      {
+        path: 'edit/:id',
+        component: () => import('../views/backend/Edit.vue'),
+        props: true
+      },
+      {
+        path: 'view/:id',
+        component: () => import('../views/backend/View.vue'),
+        props: true
       }
     ]
   },

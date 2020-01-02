@@ -81,7 +81,6 @@
   </div>
 </template>
 <script>
-import db from '@/config/index'
 export default {
   name: 'Index',
   data () {
@@ -100,39 +99,24 @@ export default {
   },
   methods: {
     onSubmit () {
-      db.collection('product').doc(this.product_id).set({
+      this.$axios.post('/createproduct', {
         product_id: this.product_id,
         product_name: this.product_name,
-        product_type: this.product_type,
         product_price: this.product_price,
+        product_type: this.product_type,
         product_image: this.product_image,
-        product_detail: this.product_detail,
-        product_stock: this.product_stock
+        product_stock: this.product_stock,
+        product_detail: this.product_detail
       })
-        .then(response => {
-          this.$q.dialog({
-            title: 'Success',
-            message: 'Create Item Success'
-          }).onOk(() => {
-            this.$router.push('/index/index')
-          }).onCancel(() => {
-            this.$router.push('/index/index')
-          }).onDismiss(() => {
-            console.log('I am triggered on both OK and Cancel')
-          })
+        .then((response) => {
+          alert('Create Item Completed')
+          this.$router.push('/index/index')
         })
         .catch(err => {
           console.log(err)
+          alert('Create Item Failed')
         })
     }
   }
 }
 </script>
-<style>
-.q-field--filled .q-field__control{
-  margin-right: 10px
-}
-.q-card__section {
-  margin-bottom: 3%;
-}
-</style>
