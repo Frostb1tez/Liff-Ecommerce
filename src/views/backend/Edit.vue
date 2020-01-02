@@ -115,7 +115,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$axios.post('/createproduct', {
+      this.$axios.post('/editproduct', {
         product_id: this.product_id,
         product_name: this.product_name,
         product_price: this.product_price,
@@ -125,8 +125,12 @@ export default {
         product_detail: this.product_detail
       })
         .then((response) => {
-          alert('Update Item Completed')
-          this.$router.push('/index/index')
+          if (response.data.status === 200) {
+            alert('Updated Item Completed')
+            this.$router.push('/index/index')
+          } else {
+            alert('Updated Item Failed')
+          }
         })
         .catch(err => {
           console.log(err)

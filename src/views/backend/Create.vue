@@ -109,8 +109,12 @@ export default {
         product_detail: this.product_detail
       })
         .then((response) => {
-          alert('Create Item Completed')
-          this.$router.push('/index/index')
+          if (response.data.status === 200) {
+            alert('Create Item Completed')
+            this.$router.push('/index/index')
+          } else if (response.data.status === 400) {
+            alert('Item Already Exists')
+          }
         })
         .catch(err => {
           console.log(err)
