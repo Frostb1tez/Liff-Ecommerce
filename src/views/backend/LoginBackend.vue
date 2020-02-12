@@ -46,6 +46,7 @@ export default {
     onSubmit () {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
         .then(user => {
+          console.log(user)
           alert('Login Completed')
           this.$router.push('/index/index')
         })

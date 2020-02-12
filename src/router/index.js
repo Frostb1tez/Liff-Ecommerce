@@ -35,8 +35,13 @@ const routes = [
     component: () => import('../views/frontend/Home.vue')
   },
   {
-    path: '/confirmotp',
-    component: () => import('../views/frontend/ConfirmOTP.vue')
+    path: '/productlist',
+    component: () => import('../views/frontend/Product.vue')
+  },
+  {
+    path: '/productdetail/:id',
+    component: () => import('../views/frontend/Productdetail.vue'),
+    props: true
   }
 ]
 

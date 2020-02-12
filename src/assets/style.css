@@ -18,8 +18,23 @@ p{
     font-family: RSU;
 }
 .q-field--filled .q-field__control{
-    margin-right: 10px
-  }
-  .q-card__section {
-    margin-bottom: 3%;
-  }
+margin-right: 10px
+}
+.q-card__section {
+margin-bottom: 3%;
+}
+.my-card{
+    width: 100%;
+    max-width: 250px;
+    width: 100%;
+    max-width: 150px;
+    height: 100%;
+    display: inline-block;
+    margin-left: 2%;
+    margin-top: 3%;
+}
+.q-btn-group{
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}
