@@ -1,6 +1,8 @@
 <template>
+<div>
+  <Topbar></Topbar>
   <div class="q-pa-md">
-
+    <Header title="รายการสินค้า"></Header>
     <q-card class="my-card" v-for="product in products" :key="product.product_id">
       <div @click="$router.push({ path: `/productdetail/${product.product_id}` })">
         <q-img :src = product.product_image
@@ -14,24 +16,36 @@
       </div>
     </q-card>
   </div>
+  <q-btn-group spread>
+    <q-btn color="red" label="ออกจากแอพลิเคชั่น" icon="exit_to_app" />
+  </q-btn-group>
+</div>
 </template>
 
 <script>
+import Topbar from '@/components/Topbar.vue'
+import Header from '@/components/Header.vue'
 export default {
+  components: {
+    Topbar, Header
+  },
   data () {
     return {
-      products: []
+      products: [],
+      cart: []
     }
   },
-  mounted () {
-    this.getProduct()
+  async created () {
+    this.$q.loading.show()
+    await this.getProduct()
+    await this.$q.loading.hide()
   },
   methods: {
     getProduct () {
       this.$axios.get('/getproduct')
         .then((response) => {
           this.products = response.data.data.product
-          console.log(this.products)
+          // console.log(this.products)
         })
         .catch(err => {
           console.log(err)

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Topbar></Topbar>
     <div class="q-pa-md">
       <q-img
       :src = products.product_image
@@ -12,14 +13,18 @@
       <p class="text-body2 text-weight-medium" style="text-align:left;">{{products.product_detail}}</p>
     </div>
     <q-btn-group spread v-if="products.product_stock !== '0'">
-      <q-btn color="orange" label="ซื้อทันที" icon="timeline" />
-      <q-btn color="green" @click="addtoCart()" label="เพิ่มลงตะกร้าสินค้า" icon="visibility" />
+      <q-btn color="grey-8" @click="$router.go(-1)" label="ย้อนกลับ" icon="arrow_back" />
+      <q-btn color="green" @click="addtoCart()" label="เพิ่มลงตะกร้าสินค้า" icon="shopping_cart" />
     </q-btn-group>
   </div>
 </template>
 
 <script>
+import Topbar from '@/components/Topbar.vue'
 export default {
+  components: {
+    Topbar
+  },
   name: 'ProductDetail',
   data () {
     return {
@@ -33,17 +38,28 @@ export default {
   },
   methods: {
     getProductDetail () {
+      this.$q.loading.show()
       this.$axios.get('/getproduct/' + this.id)
         .then(response => {
           this.products = response.data.data.product
-          console.log(this.products)
+          this.$q.loading.hide()
+          // console.log(this.products)
         })
         .catch(err => {
           console.log(err)
         })
     },
     addtoCart () {
-      alert('Success')
+      this.$q.loading.show()
+      this.$axios.post('/addcart', {
+        userid: this.$store.state.userId,
+        productid: this.id,
+        amount: 1
+      })
+        .then((response) => {
+          this.$store.dispatch('getcartActions')
+          this.$q.loading.hide()
+        })
     }
   }
 }

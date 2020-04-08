@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-sm">
     <div class="header">
       <h3 class="fontheader">{{title}}</h3>
     </div>
@@ -16,7 +16,7 @@ export default {
 <style scoped>
 .header{
   padding-bottom: 0%;
-  border-bottom: 2px solid gray;
+  border-bottom: 1px solid gray;
 }
 .fontheader{
     font-size: 22px;

@@ -35,13 +35,26 @@ const routes = [
     component: () => import('../views/frontend/Home.vue')
   },
   {
-    path: '/productlist',
+    path: '/product',
     component: () => import('../views/frontend/Product.vue')
   },
   {
     path: '/productdetail/:id',
     component: () => import('../views/frontend/Productdetail.vue'),
     props: true
+  },
+  {
+    path: '/cart',
+    component: () => import('../views/frontend/Cart.vue'),
+    props: true
+  },
+  {
+    path: '/confirmcart',
+    component: () => import('../views/frontend/Confirmcart.vue')
+  },
+  {
+    path: '/addinfo',
+    component: () => import('../views/frontend/Addinfomation.vue')
   }
 ]
 

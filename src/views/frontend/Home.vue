@@ -8,14 +8,15 @@
         >
         <q-input
         filled
+        rounded
         v-model="phone"
         label="กรุณากรอกเบอร์โทรศัพท์"
-        mask="(###) ### - ####"
+        mask="(###) - ### - ####"
         unmasked-value
         lazy-rules
         />
         <div>
-        <q-btn :disable="disabled" id="sign-in-button" type="submit" color="primary">{{getSignInCodeButton.text}}</q-btn>
+        <q-btn rounded :disable="disabled" id="sign-in-button" type="submit" color="primary">{{getSignInCodeButton.text}}</q-btn>
         </div>
         </q-form>
       </div>
@@ -33,7 +34,7 @@
         mask="######"
         />
         <div>
-        <q-btn id="sign-in-button" type="submit" color="primary">{{getSignInCodeButton.text}}</q-btn>
+        <q-btn rounded id="sign-in-button" type="submit" color="primary">{{getSignInCodeButton.text}}</q-btn>
         </div>
         </q-form>
       </div>
@@ -61,16 +62,27 @@ export default {
   },
   methods: {
     onSubmit () {
-      // this.$router.push('/confirmotp')
-      console.log(this.phone)
+      const regex = /^0[0-9]{9}$/im
+      const matches = regex.test(this.phone)
+      if (matches) {
+        var phoneNumber = this.phone.replace('0', '+66')
+      } else {
+        alert('Please type your number')
+      }
+      console.log(phoneNumber)
     },
     sendSMS () {
       this.disabled = true
       this.getSignInCodeButton = {
         text: 'กำลังส่ง SMS ..'
       }
-      let countryCode = '+66'
-      let phoneNumber = countryCode + this.phone
+      const regex = /^0[0-9]{9}$/im
+      const matches = regex.test(this.phone)
+      if (matches) {
+        var phoneNumber = this.phone.replace('0', '+66')
+      } else {
+        alert('Please type your number')
+      }
       let appVerifier = this.appVerifier
       firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
         .then((confirmationResult) => {
@@ -91,12 +103,8 @@ export default {
         window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
           'size': 'invisible',
           'callback': function (response) {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            // ...
           },
           'expired-callback': function () {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            // ...
           }
         })
         //
@@ -105,14 +113,31 @@ export default {
     },
     verifyOtp () {
       let code = this.otp
-      console.log(code)
       window.confirmationResult.confirm(code)
         .then((result) => {
-          console.log(result)
-          this.$router.push('/productlist')
+          this.$store.commit('getuserId', result.user.uid)
+          this.addUser(result.user.phoneNumber)
         })
         .catch((err) => {
           console.log(err)
+        })
+    },
+    addUser (tel) {
+      this.$q.loading.show()
+      this.$axios.post('/adduser', {
+        userid: this.$store.state.userId,
+        tel: tel
+      })
+        .then((response) => {
+          if (response.data.status === 200) {
+            this.$q.loading.hide()
+            // this.$router.push('/product')
+            this.$router.push('/addinfo')
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('Network Error')
         })
     }
   },
