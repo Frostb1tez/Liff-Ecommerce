@@ -7,6 +7,10 @@
 <script>
 
 export default {
+  beforeCreate () {
+    this.$store.dispatch('getinfoActions')
+    this.$store.dispatch('getcartActions')
+  }
 }
 </script>
 

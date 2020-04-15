@@ -23,7 +23,7 @@
           <p class="fontheader">Total Price</p>
         </div>
         <div class="col">
-          <p class="fontheader" style="color:green;">{{ Number(this.$store.state.cart.totalPrice).toLocaleString()+" THB" }}</p>
+          <p class="fontheader" style="color:green;">{{ Number(this.$store.state.totalPrice).toLocaleString()+" THB" }}</p>
         </div>
       </div>
     </section>
@@ -64,8 +64,10 @@ export default {
   components: {
     Topbar, Header
   },
-  mounted () {
-    this.$store.dispatch('getinfoActions')
+  beforeCreate () {
+    // this.$store.dispatch('getinfoActions')
+    // setTimeout(() => {
+    // }, 3000)
   },
   computed: {
     fullname () {
@@ -75,6 +77,13 @@ export default {
       return 'ที่อยู่: ' + this.$store.state.info.address
     }
   },
+  // mounted () {
+  //   this.$q.loading.show()
+  //   this.$store.dispatch('getinfoActions')
+  //     .then(() => {
+  //       this.$q.loading.hide()
+  //     })
+  // },
   methods: {
     confirmorder () {
       this.$q.loading.show()
@@ -82,7 +91,8 @@ export default {
         userid: this.$store.state.userId,
         contact: this.$store.state.info.name.firstname + ' ' + this.$store.state.info.name.lastname + ' ' + this.$store.state.info.telno,
         address: this.$store.state.info.address,
-        cart: this.$store.state.cart
+        cart: this.$store.state.cart,
+        totalPrice: this.$store.state.totalPrice
       })
         .then((res) => {
           this.$q.loading.hide()

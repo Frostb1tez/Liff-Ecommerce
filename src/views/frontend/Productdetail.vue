@@ -28,7 +28,8 @@ export default {
   name: 'ProductDetail',
   data () {
     return {
-      products: {}
+      products: {},
+      duplicate: false
     }
   },
   props: ['id'],
@@ -50,16 +51,16 @@ export default {
         })
     },
     addtoCart () {
-      this.$q.loading.show()
-      this.$axios.post('/addcart', {
-        userid: this.$store.state.userId,
-        productid: this.id,
-        amount: 1
+      this.$store.state.cart.product.forEach(v => {
+        if (v.product_id === this.products.product_id) {
+          this.duplicate = true
+          alert('ท่านเพิ่มสินค้าชิ้นนี้แล้ว')
+        }
       })
-        .then((response) => {
-          this.$store.dispatch('getcartActions')
-          this.$q.loading.hide()
-        })
+      if (this.duplicate === false) {
+        this.products.product_amount = 1
+        this.$store.commit('addtocart', this.products)
+      }
     }
   }
 }

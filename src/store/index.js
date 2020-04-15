@@ -9,6 +9,7 @@ export default new Vuex.Store({
     userId: 'mIUzp4LtjbOqG87nibIjGshgpvN2',
     tabstatus: 'home',
     cart: [],
+    totalPrice: Number,
     info: {}
   },
   mutations: {
@@ -20,17 +21,26 @@ export default new Vuex.Store({
     },
     getcart (state, payload) {
       state.cart = payload
+      state.totalPrice = payload.totalPrice
     },
     increment (state, payload) {
       state.cart.product[payload].product_amount++
-      state.cart.totalPrice += (state.cart.product[payload].product_amount * state.cart.product[payload].product_price) - (state.cart.product[payload].product_price * (state.cart.product[payload].product_amount - 1))
+      state.totalPrice += (state.cart.product[payload].product_amount * state.cart.product[payload].product_price) - (state.cart.product[payload].product_price * (state.cart.product[payload].product_amount - 1))
     },
     decrement (state, payload) {
       state.cart.product[payload].product_amount--
-      state.cart.totalPrice -= (state.cart.product[payload].product_amount * state.cart.product[payload].product_price) - (state.cart.product[payload].product_price * (state.cart.product[payload].product_amount - 1))
+      state.totalPrice -= (state.cart.product[payload].product_amount * state.cart.product[payload].product_price) - (state.cart.product[payload].product_price * (state.cart.product[payload].product_amount - 1))
     },
     getinfo (state, payload) {
       state.info = payload
+    },
+    select (state, { d, index }) {
+      state.cart.product.splice(index, 1)
+      state.totalPrice -= d
+    },
+    addtocart (state, payload) {
+      state.cart.product.push(payload)
+      state.totalPrice += payload.product_price
     }
   },
   actions: {

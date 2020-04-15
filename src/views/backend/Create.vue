@@ -102,10 +102,10 @@ export default {
       this.$axios.post('/createproduct', {
         product_id: this.product_id,
         product_name: this.product_name,
-        product_price: this.product_price,
+        product_price: parseInt(this.product_price),
         product_type: this.product_type,
         product_image: this.product_image,
-        product_stock: this.product_stock,
+        product_stock: parseInt(this.product_stock),
         product_detail: this.product_detail
       })
         .then((response) => {

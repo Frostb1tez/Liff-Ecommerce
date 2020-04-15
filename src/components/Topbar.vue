@@ -27,9 +27,6 @@ export default {
       tab: this.$store.state.tabstatus
     }
   },
-  async mounted () {
-    await this.$store.dispatch('getcartActions')
-  },
   watch: {
     tab (e) {
       this.$store.commit('tab', e)

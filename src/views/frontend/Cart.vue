@@ -10,41 +10,44 @@
     <div v-else>
       <div class="q-pa-md">
         <Header title="ตะกร้าสินค้า"></Header>
-        <div class="row">
-          <q-btn rounded color="red" icon="delete_forever" label="ลบสินค้า" @click="delcart"/>
+        <div class="row q-gutter-md " style="margin-top:2%;margin-bottom:10%">
+          <q-btn v-if="del == false" rounded color="red" icon="delete_forever" label="ลบสินค้า" @click="del = true" size="sm"/>
+          <q-btn v-if="del == false" rounded color="red" icon="delete_forever" label="ลบสินค้าทั้งหมด" @click="delcart()" size="sm"/>
+          <q-btn v-else rounded color="red" icon="delete_forever" label="ยกเลิก" @click="del = false" size="sm"/>
         </div>
-        <q-card>
-          <div class="row" v-for="(product, index) in this.$store.state.cart.product" :key="index">
-          <div class="col-xs-4">
-            <q-img :src = product.product_image
-              :ratio = "1"
-            />
-          </div>
-          <div class="col-xs-4">
-            <p class="fontheader">{{product.product_name}}</p>
-            <div class="quantity">
-              <button @click="decrement(index)">&mdash;</button>
-              <q-input outlined v-model="product.product_amount" type="number" readonly>
-              </q-input>
-              <button @click="increment(index)">&#xff0b;</button>
-            </div>
-          </div>
-          <div class="col-xs-4">
-            <p class="fontheader">Total:</p>
-            <p class="fontheader">{{Number(product.product_price*product.product_amount).toLocaleString()+" THB"}} </p>
-            <p>{{"( "+ Number(product.product_price).toLocaleString() + " THB per Unit )"}}</p>
-          </div>
-          <q-separator inset style="margin-top:5%; margin-bottom:5%" />
+        <div class="row" v-for="(product, index) in this.$store.state.cart.product" :key="index">
+        <div v-if="del" class="col-xs-1" style="margin:auto;color:red;font-size:1.5rem">
+          <q-icon name="clear" @click="select(product.product_amount * product.product_price, index)"/>
         </div>
-        <div class="row">
-          <div class="col">
-            <p class="fontheader">Total Price</p>
-          </div>
-          <div class="col">
-            <p class="fontheader" style="color:green;">{{ Number(this.$store.state.cart.totalPrice).toLocaleString()+" THB" }}</p>
+        <div :class="delfalse">
+          <q-img :src = product.product_image
+            :ratio = "1"
+          />
+        </div>
+        <div class="col-xs-4">
+          <p class="fontheader">{{product.product_name}}</p>
+          <div class="quantity">
+            <button @click="decrement(index)">&mdash;</button>
+            <q-input outlined v-model="product.product_amount" type="number" readonly>
+            </q-input>
+            <button @click="increment(index)">&#xff0b;</button>
           </div>
         </div>
-        </q-card>
+        <div class="col-xs-4">
+          <p class="fontheader">Total:</p>
+          <p class="fontheader">{{Number(product.product_price*product.product_amount).toLocaleString()+" THB"}} </p>
+          <p>{{"( "+ Number(product.product_price).toLocaleString() + " THB per Unit )"}}</p>
+        </div>
+        <q-separator inset style="margin-top:5%; margin-bottom:5%" />
+      </div>
+      <div class="row">
+        <div class="col">
+          <p class="fontheader">Total Price</p>
+        </div>
+        <div class="col">
+          <p class="fontheader" style="color:green;">{{ Number(this.$store.state.totalPrice).toLocaleString()+" THB" }}</p>
+        </div>
+      </div>
       </div>
       <q-btn-group spread>
         <q-btn color="green" @click='confirmcart' label="ยืนยันตะกร้าสินค้า" icon="shopping_cart" />
@@ -59,13 +62,28 @@ import Header from '@/components/Header.vue'
 export default {
   data () {
     return {
+      del: false
       // product: this.$store.state.cart.product
+    }
+  },
+  computed: {
+    delfalse () {
+      return this.del === false ? 'col-xs-4' : 'col-xs-3'
     }
   },
   components: {
     Topbar, Header
   },
+  mounted () {
+    console.log(this.$store.state.totalPrice)
+  },
   methods: {
+    select (d, index) {
+      this.$store.commit('select', { d, index })
+    },
+    clearcart () {
+      this.$store.commit('clearcart')
+    },
     delcart () {
       this.$q.loading.show()
       this.$axios.post('/clearcart', {
@@ -94,12 +112,12 @@ export default {
       this.$q.loading.show()
       this.$axios.post('/confirmcart', {
         userid: this.$store.state.userId,
-        cart: this.$store.state.cart
+        cart: this.$store.state.cart,
+        totalPrice: this.$store.state.totalPrice
       })
         .then((res) => {
           this.$q.loading.hide()
           this.$router.push({ path: `/confirmcart` })
-          // this.
         })
         .catch(e => {
           console.log(e)
