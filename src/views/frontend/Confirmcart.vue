@@ -64,11 +64,6 @@ export default {
   components: {
     Topbar, Header
   },
-  beforeCreate () {
-    // this.$store.dispatch('getinfoActions')
-    // setTimeout(() => {
-    // }, 3000)
-  },
   computed: {
     fullname () {
       return 'ชื่อ-นามสกุล: ' + this.$store.state.info.name.firstname + ' ' + this.$store.state.info.name.lastname + ' เบอร์โทรติดต่อ: ( ' + this.$store.state.info.telno.replace('+66', '0') + ' )'
@@ -77,10 +72,7 @@ export default {
       return `ที่อยู่: ${this.$store.state.info.address.address} ${this.$store.state.info.address.district} ${this.$store.state.info.address.amphoe} ${this.$store.state.info.address.province} ${this.$store.state.info.address.zipcode}`
     }
   },
-  async mounted () {
-    this.$q.loading.show()
-    await this.$store.dispatch('getinfoActions')
-    this.$q.loading.hide()
+  mounted () {
   },
   methods: {
     confirmorder () {

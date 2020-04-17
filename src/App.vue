@@ -7,13 +7,7 @@
 <script>
 
 export default {
-  async beforeCreate () {
-    if (!this.$liff.isLoggedIn()) {
-      this.$liff.login()
-    }
-    const profile = await this.$liff.getProfile()
-    const tokenId = profile.userId
-    this.$store.commit('getToken', tokenId)
+  mounted () {
     this.$store.dispatch('getinfoActions')
     this.$store.dispatch('getcartActions')
   }

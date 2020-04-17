@@ -124,7 +124,7 @@ export default {
     addUser (tel) {
       this.$q.loading.show()
       this.$axios.post('/adduser', {
-        tokenid: this.$store.state.tokenid,
+        tokenid: this.$store.state.tokenId,
         userid: this.$store.state.userId,
         tel: tel
       })
@@ -139,9 +139,32 @@ export default {
           console.log(err)
           alert('Network Error')
         })
+    },
+    checkUser () {
+      this.$q.loading.show()
+      this.$axios.post('/checkuser', {
+        userid: this.$store.state.userId,
+        tokenid: this.$store.state.tokenId
+      })
+        .then((response) => {
+          if (response.data.status === 200) {
+            if (response.data.isMember === 1) {
+              this.$q.loading.hide()
+              this.$router.push('/product')
+            }
+            this.$q.loading.hide()
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('Network Error')
+        })
     }
   },
-  mounted () {
+  async mounted () {
+    const profile = await this.$liff.getProfile()
+    await this.$store.commit('gettokenid', profile.userId)
+    await this.checkUser()
     this.initReCaptcha()
   }
 }

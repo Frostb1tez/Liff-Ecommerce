@@ -17,7 +17,7 @@
     </q-card>
   </div>
   <q-btn-group spread>
-    <q-btn color="red" label="ออกจากแอพลิเคชั่น" icon="exit_to_app" />
+    <q-btn color="red" label="ออกจากแอพลิเคชั่น" icon="exit_to_app" @click="exit()"/>
   </q-btn-group>
 </div>
 </template>
@@ -49,6 +49,9 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    exit () {
+      this.$liff.closeWindow()
     }
   }
 }

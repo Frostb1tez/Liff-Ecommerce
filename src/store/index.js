@@ -43,7 +43,7 @@ export default new Vuex.Store({
       state.cart.product.push(payload)
       state.totalPrice += payload.product_price
     },
-    getToken (state, payload) {
+    gettokenid (state, payload) {
       state.tokenId = payload
     }
   },

@@ -45,14 +45,14 @@ export default {
   data () {
     return {
       name: {
-        firstname: this.$store.state.info.name.firstname ? this.$store.state.info.name.firstname : '',
-        lastname: this.$store.state.info.name.lastname ? this.$store.state.info.name.lastname : ''
+        firstname: this.$route.query.type === 'edit' ? this.$store.state.info.name.firstname : '',
+        lastname: this.$route.query.type === 'edit' ? this.$store.state.info.name.lastname : ''
       },
-      address: this.$store.state.info.address.address ? this.$store.state.info.address.address : '',
-      district: this.$store.state.info.address.district ? this.$store.state.info.address.district : '',
-      amphoe: this.$store.state.info.address.amphoe ? this.$store.state.info.address.amphoe : '',
-      province: this.$store.state.info.address.province ? this.$store.state.info.address.province : '',
-      zipcode: this.$store.state.info.address.zipcode ? this.$store.state.info.address.zipcode : '',
+      address: this.$route.query.type === 'edit' ? this.$store.state.info.address.address : '',
+      district: this.$route.query.type === 'edit' ? this.$store.state.info.address.district : '',
+      amphoe: this.$route.query.type === 'edit' ? this.$store.state.info.address.amphoe : '',
+      province: this.$route.query.type === 'edit' ? this.$store.state.info.address.province : '',
+      zipcode: this.$route.query.type === 'edit' ? this.$store.state.info.address.zipcode : '',
       firstnameRule: [
         v => !!v || 'กรุณากรอกชื่อ'
       ],
@@ -83,12 +83,20 @@ export default {
       })
         .then((response) => {
           if (response.data.status === 200) {
-            this.$q.loading.hide()
-            if (this.$route.query.type === 'edit') {
-              this.$router.push('/confirmcart')
-            } else {
-              this.$router.push('/product')
-            }
+            this.$store.dispatch('getinfoActions')
+              .then(() => {
+                this.$q.loading.hide()
+                if (this.$route.query.type === 'edit') {
+                  this.$router.push('/confirmcart')
+                } else {
+                  this.$router.push('/product')
+                }
+              })
+              .catch(err => {
+                console.log(err)
+                alert('Network Error')
+                this.$q.loading.hide()
+              })
           }
         })
         .catch(err => {
