@@ -9,7 +9,7 @@ import('./assets/style.css')
 
 Vue.prototype.$liff = window.liff
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://localhost:5000/siamproject-dbffa/us-central1/api'
+axios.defaults.baseURL = 'https://us-central1-siamproject-dbffa.cloudfunctions.net/api'
 Vue.prototype.$axios = axios
 
 new Vue({
