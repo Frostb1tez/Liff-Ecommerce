@@ -42,7 +42,7 @@ export default {
       this.$q.loading.show()
       this.$axios.get('/getproduct/' + this.id)
         .then(response => {
-          this.products = response.data.data.product
+          this.products = response.data.data
           this.$q.loading.hide()
           // console.log(this.products)
         })

@@ -50,7 +50,7 @@ export default {
     getProduct () {
       this.$axios.get('/getproduct')
         .then((response) => {
-          this.products = response.data.data.product
+          this.products = response.data.data
         })
         .catch(err => {
           console.log(err)

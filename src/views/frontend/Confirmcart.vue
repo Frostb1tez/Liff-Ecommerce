@@ -35,7 +35,7 @@
         <p style="text-align:left;">{{address}}</p>
         <div class="row">
           <div class="col-xs-4">
-            <a href="#" >เปลี่ยนแปลงที่อยู่</a>
+            <a @click="$router.push({ path: 'addinfo', query: { type: 'edit' } })">เปลี่ยนแปลงที่อยู่</a>
           </div>
           <div class="col"></div>
           </div>
@@ -51,7 +51,7 @@
     </section> -->
   </div>
   <q-btn-group spread>
-    <q-btn color="grey-8" @click="$router.go(-1)" label="ย้อนกลับ" icon="arrow_back" />
+    <q-btn color="grey-8" @click="$router.push('/cart')" label="ย้อนกลับ" icon="arrow_back" />
     <q-btn color="green" label="ยืนยันออเดอร์" icon="playlist_add_check" @click="confirmorder()"/>
   </q-btn-group>
   </div>
@@ -74,16 +74,14 @@ export default {
       return 'ชื่อ-นามสกุล: ' + this.$store.state.info.name.firstname + ' ' + this.$store.state.info.name.lastname + ' เบอร์โทรติดต่อ: ( ' + this.$store.state.info.telno.replace('+66', '0') + ' )'
     },
     address () {
-      return 'ที่อยู่: ' + this.$store.state.info.address
+      return `ที่อยู่: ${this.$store.state.info.address.address} ${this.$store.state.info.address.district} ${this.$store.state.info.address.amphoe} ${this.$store.state.info.address.province} ${this.$store.state.info.address.zipcode}`
     }
   },
-  // mounted () {
-  //   this.$q.loading.show()
-  //   this.$store.dispatch('getinfoActions')
-  //     .then(() => {
-  //       this.$q.loading.hide()
-  //     })
-  // },
+  async mounted () {
+    this.$q.loading.show()
+    await this.$store.dispatch('getinfoActions')
+    this.$q.loading.hide()
+  },
   methods: {
     confirmorder () {
       this.$q.loading.show()
@@ -96,6 +94,7 @@ export default {
       })
         .then((res) => {
           this.$q.loading.hide()
+          this.$liff.closeWindow()
         })
         .catch(e => {
           this.$q.loading.hide()

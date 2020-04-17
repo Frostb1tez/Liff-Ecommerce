@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    tokenId: '',
     userId: 'mIUzp4LtjbOqG87nibIjGshgpvN2',
     tabstatus: 'home',
     cart: [],
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     addtocart (state, payload) {
       state.cart.product.push(payload)
       state.totalPrice += payload.product_price
+    },
+    getToken (state, payload) {
+      state.tokenId = payload
     }
   },
   actions: {

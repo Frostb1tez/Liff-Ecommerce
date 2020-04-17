@@ -1,7 +1,7 @@
 <template>
 <div>
   <Topbar></Topbar>
-  <div class="q-pa-md">
+  <div class="q-pa-md" style="margin-bottom:7%;">
     <Header title="รายการสินค้า"></Header>
     <q-card class="my-card" v-for="product in products" :key="product.product_id">
       <div @click="$router.push({ path: `/productdetail/${product.product_id}` })">
@@ -44,8 +44,7 @@ export default {
     getProduct () {
       this.$axios.get('/getproduct')
         .then((response) => {
-          this.products = response.data.data.product
-          // console.log(this.products)
+          this.products = response.data.data
         })
         .catch(err => {
           console.log(err)

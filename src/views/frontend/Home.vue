@@ -86,7 +86,6 @@ export default {
       let appVerifier = this.appVerifier
       firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
         .then((confirmationResult) => {
-          console.log(confirmationResult)
           window.confirmationResult = confirmationResult
           this.inputOTP = true
           this.inputphone = false
@@ -125,6 +124,7 @@ export default {
     addUser (tel) {
       this.$q.loading.show()
       this.$axios.post('/adduser', {
+        tokenid: this.$store.state.tokenid,
         userid: this.$store.state.userId,
         tel: tel
       })

@@ -40,7 +40,7 @@
         </div>
         <q-separator inset style="margin-top:5%; margin-bottom:5%" />
       </div>
-      <div class="row">
+      <div class="row" style="margin-top:3%; margin-bottom:7%;">
         <div class="col">
           <p class="fontheader">Total Price</p>
         </div>

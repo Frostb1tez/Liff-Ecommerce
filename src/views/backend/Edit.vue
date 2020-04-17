@@ -100,7 +100,7 @@ export default {
   created () {
     this.$axios.get('/getproduct/' + this.id)
       .then((response) => {
-        this.products = response.data.data.product
+        this.products = response.data.data
         this.product_id = this.products.product_id
         this.product_name = this.products.product_name
         this.product_price = this.products.product_price

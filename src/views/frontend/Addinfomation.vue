@@ -16,6 +16,22 @@
             <q-input outlined rounded v-model="address" label="ที่อยู่" type="textarea" :rules="addressRule"/>
           </div>
         </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <ThailandAutoComplete v-model="district" type="district" @select="select" placeholder="ตำบล..."/>
+          </div>
+          <div class="col-xs-6">
+            <ThailandAutoComplete v-model="amphoe" type="amphoe" @select="select" placeholder="อำเภอ..."/>
+          </div>
+        </div>
+        <div class="row" >
+          <div class="col-xs-6">
+            <ThailandAutoComplete v-model="province" type="province" @select="select" placeholder="จังหวัด..."/>
+          </div>
+          <div class="col-xs-6">
+            <ThailandAutoComplete v-model="zipcode" type="zipcode" @select="select" placeholder="รหัสไปรษณีย์..."/>
+          </div>
+        </div>
         <q-btn rounded type="submit" color="primary" style="width:50%;margin-top:7%">บันทึก</q-btn>
       </form>
     </div>
@@ -24,14 +40,19 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import ThailandAutoComplete from '@/components/vue-thailand-address-autocomplete.vue'
 export default {
   data () {
     return {
       name: {
-        firstname: '',
-        lastname: ''
+        firstname: this.$store.state.info.name.firstname ? this.$store.state.info.name.firstname : '',
+        lastname: this.$store.state.info.name.lastname ? this.$store.state.info.name.lastname : ''
       },
-      address: '',
+      address: this.$store.state.info.address.address ? this.$store.state.info.address.address : '',
+      district: this.$store.state.info.address.district ? this.$store.state.info.address.district : '',
+      amphoe: this.$store.state.info.address.amphoe ? this.$store.state.info.address.amphoe : '',
+      province: this.$store.state.info.address.province ? this.$store.state.info.address.province : '',
+      zipcode: this.$store.state.info.address.zipcode ? this.$store.state.info.address.zipcode : '',
       firstnameRule: [
         v => !!v || 'กรุณากรอกชื่อ'
       ],
@@ -44,7 +65,7 @@ export default {
     }
   },
   components: {
-    Header
+    Header, ThailandAutoComplete
   },
   methods: {
     saveAddress () {
@@ -52,12 +73,22 @@ export default {
       this.$axios.post('/addinfo', {
         userid: this.$store.state.userId,
         name: this.name,
-        address: this.address
+        address: {
+          address: this.address,
+          district: this.district,
+          amphoe: this.amphoe,
+          province: this.province,
+          zipcode: this.zipcode
+        }
       })
         .then((response) => {
           if (response.data.status === 200) {
             this.$q.loading.hide()
-            this.$router.push('/product')
+            if (this.$route.query.type === 'edit') {
+              this.$router.push('/confirmcart')
+            } else {
+              this.$router.push('/product')
+            }
           }
         })
         .catch(err => {
@@ -65,6 +96,12 @@ export default {
           alert('Network Error')
           this.$q.loading.hide()
         })
+    },
+    select (address) {
+      this.district = address.district
+      this.amphoe = address.amphoe
+      this.province = address.province
+      this.zipcode = address.zipcode
     }
   }
 }
@@ -72,7 +109,7 @@ export default {
 
 <style scoped>
 .q-field--outlined {
-    padding: 0 5px;
+  padding: 0 5px;
 }
 .row {
   margin-top: 5%;
